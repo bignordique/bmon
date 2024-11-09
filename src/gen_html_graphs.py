@@ -1,5 +1,5 @@
 #!/home/pi/bmon/venv/bin/python
-# comment
+
 import logging
 import re
 from time import time, sleep, strftime, localtime
