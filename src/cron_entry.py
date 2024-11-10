@@ -28,7 +28,7 @@ class cron_entry():
 if __name__ == "__main__":
 
     def print_time():
-        print(f'\nCron activates {datetime.datetime.now()}')
+        print(f'**** Cron activates {datetime.datetime.now()}\n')
 
     import time
 
