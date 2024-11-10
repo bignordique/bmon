@@ -1,4 +1,4 @@
-#!/var/www/html/python3_11/bin/python3.11
+#!/home/pi/bmon/venv/bin/python
 import logging
 import datetime
 from dateutil import tz
@@ -20,7 +20,7 @@ class cron_entry():
     def check_entry(self):
         previous = self.next
         self.next= self.entry.next(datetime.datetime.now(tz=self.local_zone))
-#        self.logger.debug(f'\n    {self.id}: previous: {previous}  next: {self.next}\n')
+        self.logger.debug(f'\n    {self.id}: previous: {previous}  next: {self.next}\n')
         if self.next > previous:
             self.func()
 
@@ -28,7 +28,7 @@ class cron_entry():
 if __name__ == "__main__":
 
     def print_time():
-        print(datetime.datetime.now())
+        print(f'\nCron activates {datetime.datetime.now()}')
 
     import time
 
