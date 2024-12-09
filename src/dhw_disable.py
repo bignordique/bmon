@@ -25,7 +25,8 @@ class dhw_disable ():
         GPIO.output(bit, GPIO.LOW)
         self.pump_status_file = "/tmp/pump_status"
         self.night_window = in_window("night_window",\
-                                      "0-59/30 * * * *", "15-59/30 * * * *")
+                                      "0-59/30 0 * * *", "15-59/30 4 * * *")
+#                                      "0-59/30 * * * *", "15-59/30 * * * *")
 #                                      "0-58/2  * * * *", "1-59/2  * * * *")
         self.logger = logging.getLogger(__name__)
         self.logger.info(f' startup')
