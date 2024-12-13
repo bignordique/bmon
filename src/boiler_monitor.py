@@ -7,12 +7,17 @@ import logging
 from logging.handlers import TimedRotatingFileHandler,RotatingFileHandler
 import RPi.GPIO as GPIO
 from contextlib import suppress
+import sys
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
 zc_file = "/mnt/nfsshare/zone_change"
 zc_logfile = "/home/pi/bmon/log/zc_logfile"
 dhw_disable_bit = 18
+
+clear_dhw_disable = False
+if "--clear_dhw_disable" in sys.argv : clear_dhw_disable = True
 
 class boiler_monitor ():
 
@@ -35,7 +40,6 @@ if __name__ == "__main__":
         handlers = [rot_handler],
         level=logging.INFO)
 
-
     zc_logger = logging.getLogger('zc_logger')
     zc_logger.propagate = False
     zc_rot_handler = \
@@ -45,6 +49,12 @@ if __name__ == "__main__":
 
 
     main = boiler_monitor(zc_logger)
+
+    if clear_dhw_disable : 
+        logging.info(f'\n    Exiting.  dhw_disable_bit: ' +
+                     f'{GPIO.input(dhw_disable_bit)}\n')
+        GPIO.cleanup()
+        exit()
 
 #    logging.getLogger('gpio_filter').setLevel(logging.DEBUG)
     logging.getLogger('dhw_disable').setLevel(logging.DEBUG)
