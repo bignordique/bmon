@@ -32,8 +32,6 @@ function establish_wss () {
 
 window.establish_wss();
 
-setInterval(check_wss_state, 1000);
+//setInterval(check_wss_state, 1000);
 
-function check_pump_state() {
-    <script src="https://hw.bignordique.com/cgi-bin/gen_pump_status.py"></script> 
-}
+
