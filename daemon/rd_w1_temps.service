@@ -1,6 +1,6 @@
 [Unit]
 Description=rd_w1_temps service
-Documentation=file:/home/pi/bmon/git/bmon/doc/rd_w1_temps.md
+Documentation=file:/home/pi//bmon/doc/rd_w1_temps.md
 After=network.target
 StartLimitIntervalSec=0
 [Service]
@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 Restartsec=1
 User=pi
-ExecStart=/home/pi/bmon/git/bmon/src/rd_w1_temps.py
+ExecStart=/home/pi/bmon/src/rd_w1_temps.py
 PIDfile=/run/rd_w1_temps
 [Install]
 WantedBy=multi-user.target

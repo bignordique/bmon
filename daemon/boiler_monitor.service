@@ -1,6 +1,6 @@
 [Unit]
 Description=boiler_monitor service
-Documentation=file:/home/pi/bmon/git/bmon/doc/boiler_monitor.md
+Documentation=file:/home/pi/bmon/doc/boiler_monitor.md
 After=network.target
 StartLimitIntervalSec=0
 [Service]
@@ -8,8 +8,8 @@ Type=simple
 Restart=always
 Restartsec=1
 User=pi
-ExecStart=/home/pi/bmon/git/bmon/src/boiler_monitor.py
-ExecStopPost=/home/pi/bmon/git/bmon/src/boiler_monitor.py --clear_dhw_disable
+ExecStart=/home/pi/bmon/src/boiler_monitor.py
+ExecStopPost=/home/pi/bmon/src/boiler_monitor.py --clear_dhw_disable
 PIDfile=/run/boiler_monitor
 [Install]
 WantedBy=multi-user.target
