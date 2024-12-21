@@ -2,7 +2,8 @@
 <html lang="en">
 
 
-<script src="hw_pump.js"></script> 
+<!-- <script src="hw_pump.js"></script> -->
+
 <script src="Chart.js"></script>
 
 
@@ -13,25 +14,42 @@
     <title>Hot Water Pump</title>
 </head>
 
-<div>
-    <span id="pump"></span>
-</div>
+<style>
+
+</style>
+
+<script> 
+
+    function set_get_status (button, value) {
+        fetch("set_get_status.fcgi", 
+              {method: "POST",
+              body: JSON.stringify({button: button, value: value}),
+              headers: {"Content-type": "application/json; charset=UTF-8"}})
+
+        .then (response => response.text())
+        .then(data => {var node = document.getElementById(button);
+                       node.innerText = data;})
+    }
+
+ //   setInterval(write_it, 1000);
+</script>
 
 <div>
-    <button id="set_15" type="button" style="font-size:1.3em"
-            onclick='ws.send(JSON.stringify({opcode:"hw_pump", value:"set_15", source:"browser"}))'>
-        SET 15 MINUTES
-    </button>
+        <span id="pump"></span>
+        <button id="pump_set_15" type="button"
+        onclick='set_get_status("pump","15")'> 
+            SET 15 MINUTES
+        </button>
 </div>
 
 <div>
     <span id="vacay_days"></span> vacation disable days remaining
     <button id="vacay_plus_1" type="button"
-            onclick='ws.send(JSON.stringify({opcode:"hw_pump", value:"vacay_plus_1", source:"browser"}))'>
+    onclick='set_get_status("vacay_days","1")'> 
         +1
     </button>
     <button id="vacay_minus_1" type="button"
-    onclick='ws.send(JSON.stringify({opcode:"hw_pump", value:"vacay_minus_1", source:"browser"}))'>
+    onclick='set_get_status("vacay_days","-1")'> 
         -1
     </button>
 
