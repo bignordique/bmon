@@ -1,11 +1,8 @@
 <!doctype html>
 <html lang="en">
 
-
-<!-- <script src="hw_pump.js"></script> -->
-
 <script src="Chart.js"></script>
-
+<!-- Chart.min.js doesn't work quite the same?? -->
 
 <head>
     <link rel="icon" type="image/png" href="/images/steam_icon.png" sizes="32x32">
@@ -15,23 +12,36 @@
 </head>
 
 <style>
-
 </style>
 
 <script> 
 
+    function vacay_warning(pckt){
+        window.alert("Vacation disable must be <= 15 and >= 0");
+    }
+
     function set_get_status (button, value) {
         fetch("set_get_status.fcgi", 
               {method: "POST",
-              body: JSON.stringify({button: button, value: value}),
-              headers: {"Content-type": "application/json; charset=UTF-8"}})
-
+               body: JSON.stringify({button: button, value: value}),
+               headers: {"Content-type": "application/json; charset=UTF-8"}})
         .then (response => response.text())
         .then(data => {var node = document.getElementById(button);
-                       node.innerText = data;})
+                       ret_data = JSON.parse(data);
+                       node.innerText = ret_data.value;
+                       if (button == "vacay_days" && ret_data.vacay_warning == "True") 
+                           {vacay_warning()}
+                    })
     }
 
- //   setInterval(write_it, 1000);
+    function on_load_func (){
+        set_get_status("pump", "0");
+        set_get_status("vacay_days", "0");
+        setInterval(() => {set_get_status("pump", "0");}, 1000);
+        setInterval(() => {set_get_status("vacay_days", "0");}, 60*1000);
+    }
+    window.onload = on_load_func
+
 </script>
 
 <div>

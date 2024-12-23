@@ -1,4 +1,9 @@
 #!/home/pi/bmon/venv/bin/python
+
+# This one is for threads, not asyncio  Call check entry and the func will be
+# called when appropriate.   The other version used asyncio and
+# had a private timer loop.  Once launched, would call the func
+# on its own.   Unfortuneately, same names were used.   "pip install crontab" required.
 import logging
 import datetime
 from dateutil import tz
@@ -15,12 +20,12 @@ class cron_entry():
         self.func = func
         self.local_zone = tz.tzlocal()
         self.next = self.entry.next(datetime.datetime.now(tz=self.local_zone))
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(id)
 
     def check_entry(self):
         previous = self.next
         self.next= self.entry.next(datetime.datetime.now(tz=self.local_zone))
-        self.logger.debug(f'\n    {self.id}: previous: {previous}  next: {self.next}\n')
+        self.logger.debug(f'\n    previous: {previous}  next: {self.next}\n')
         if self.next > previous:
             self.func()
 
@@ -32,7 +37,7 @@ if __name__ == "__main__":
 
     import time
 
-    logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s:%(message)s', 
+    logging.basicConfig(format='%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:%(message)s', 
                         level=logging.DEBUG)
 
     a = cron_entry("cron_entry_test", "*/1 * * * *", print_time)

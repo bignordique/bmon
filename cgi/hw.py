@@ -1,34 +1,14 @@
 #!/home/pi/bmon/venv/bin/python
+
 from hw_daemon import hw_daemon
-import threading
-import time
 import logging
-import re
 import json
-from logging.handlers import RotatingFileHandler
-
-if __name__ == "__main__": 
-    logfile = "test.log"
-else: 
-    logfile = "/var/log/lighttpd/hw_daemon.log"
-
-rot_handler = RotatingFileHandler(logfile, maxBytes=30000, backupCount=5)
-if __name__ == "__main__": rot_handler.doRollover()
-
-logging.basicConfig(
-        format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s",
-        handlers = [rot_handler],
-        level=logging.DEBUG)
-
-logger = logging.getLogger(__name__+f'_inst')
 
 class process_request():
 
     def __init__ (self):
         self.daemon = hw_daemon()
-        daemon_thread = threading.Thread(target = self.daemon.loop, daemon = True)
-        daemon_thread.start()
-        logger.info(f'Startup.')
+        self.logger = logging.getLogger(__name__)
 
     def doit(self, environ, start_response):
  
@@ -36,23 +16,28 @@ class process_request():
         request_body = environ['wsgi.input'].read(request_body_size)
         request_decoded = json.loads(request_body)
 
-        logger.debug(request_body)
+        self.logger.debug(request_body)
 
-        err_handle = environ["wsgi.errors"]
-        err_handle.write(f'Its howdy dudey time!\n')
+        wsgi_err_handle = environ["wsgi.errors"]
+#        wsgi_err_handle.write(f'Its howdy dowdy time!\n')
 
         start_response('200 OK', [('Content-Type', 'text/plain')])
-        if request_decoded["button"] == "pump": 
+        if request_decoded["button"] == "pump" or request_decoded["button"] == "alexa": 
             return[json.dumps(self.daemon.set_get_pump(int(request_decoded["value"])))]
         elif request_decoded["button"] == "vacay_days":
             return[json.dumps(self.daemon.set_get_vacay(int(request_decoded["value"])))]
+        if request_decoded["button"] == "alexa": 
+            return[json.dumps(self.daemon.set_get_alexa(int(request_decoded["value"])))]
 
-        logger.error(f'    No match on request_decoded:" {request_decoded}')
-        return[]
+        self.logger.error(f'No match on request_decoded:" {request_decoded}\n')
+        return[json.dumps({})]
 
 if __name__ == "__main__":
 
     import os
+
+    logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n"+
+                        "    %(message)s")
 
     process = process_request()
 

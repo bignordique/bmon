@@ -19,12 +19,13 @@ class pump_pexpect():
     control_outlet_1 = '-+ Control Outlet 1 -+.*> '
     immediate_YES = 'Immediate .* to cancel : '
     successfully_continue = '.* successfully .* to continue...'
+    logfile = "/var/log/lighttpd/pump_command.log"
 
     def __init__(self): pass
     
     def pump_command(self, next_state):
 #        self.logger.debug(f'hw pump pexpect {next_state}')
-        log_file = open('pump_command.log', 'w')
+        log_file = open(self.logfile, 'w')
         run_once = True
     
         while run_once:
