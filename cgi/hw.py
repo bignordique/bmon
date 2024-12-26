@@ -35,11 +35,19 @@ class process_request():
 if __name__ == "__main__":
 
     import os
+    import sys
 
     logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n"+
                         "    %(message)s")
 
     process = process_request()
+
+# Instantiating process_request has the side effect of clearing the dhw_disable_bit.
+    if "--clear_dhw_disable" in sys.argv:
+        logging.getLogger('dhw_disable').info(f'\n    Exiting.  dhw_disable_bit: ' +
+                     f'{GPIO.input(dhw_disable_bit)}\n')
+        GPIO.cleanup()
+        exit()
 
     def test_response(stuff, more_stuff):
         print(f'{stuff} {more_stuff}\n')

@@ -2,7 +2,6 @@
 
 import asyncio
 from gpio_filter import gpio_filter
-from dhw_disable import dhw_disable
 import logging
 from logging.handlers import TimedRotatingFileHandler,RotatingFileHandler
 import RPi.GPIO as GPIO
@@ -14,10 +13,6 @@ GPIO.setwarnings(False)
 
 zc_file = "/mnt/nfsshare/zone_change"
 zc_logfile = "/home/pi/bmon/log/zc_logfile"
-dhw_disable_bit = 18
-
-clear_dhw_disable = False
-if "--clear_dhw_disable" in sys.argv : clear_dhw_disable = True
 
 class boiler_monitor ():
 
@@ -30,8 +25,6 @@ class boiler_monitor ():
         self.upper_family = gpio_filter("upper_bedroom", 26, zc_logger)
         self.hw_tank = gpio_filter("hw_tank", 6, zc_logger)
         self.boiler = gpio_filter("boiler", 5, zc_logger)
-        self.dhw_disable = dhw_disable("dhw_disable", dhw_disable_bit)
-
 
 if __name__ == "__main__":
     rot_handler = RotatingFileHandler(zc_logfile, maxBytes=30000, backupCount=5)
@@ -50,14 +43,7 @@ if __name__ == "__main__":
 
     main = boiler_monitor(zc_logger)
 
-    if clear_dhw_disable : 
-        logging.info(f'\n    Exiting.  dhw_disable_bit: ' +
-                     f'{GPIO.input(dhw_disable_bit)}\n')
-        GPIO.cleanup()
-        exit()
-
 #    logging.getLogger('gpio_filter').setLevel(logging.DEBUG)
-    logging.getLogger('dhw_disable').setLevel(logging.DEBUG)
 
     tasks = asyncio.gather(
         asyncio.ensure_future(main.lower_lake.pos_edge()),
@@ -68,7 +54,6 @@ if __name__ == "__main__":
         asyncio.ensure_future(main.upper_family.pos_edge()),
         asyncio.ensure_future(main.hw_tank.pos_edge()),
         asyncio.ensure_future(main.boiler.pos_edge()),
-        asyncio.ensure_future(main.dhw_disable.loop())
     )
 
     loop = asyncio.get_event_loop()
@@ -93,5 +78,4 @@ if __name__ == "__main__":
     finally:
         loop.close()
 
-    main.dhw_disable.set_enable_dhw()
     GPIO.cleanup()

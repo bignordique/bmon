@@ -4,12 +4,14 @@ import logging
 import threading
 from hw_pump_pexpect import pump_pexpect
 from cron_entry import cron_entry
+from dhw_disable import dhw_disable
 
 class hw_daemon(pump_pexpect):
 
     def __init__ (self):
         pump_pexpect.__init__(self)
         self.logger = logging.getLogger(__name__)
+        self.dhw_disable_inst = dhw_disable()
         self.pump_is_on = False
         self.set_15 = True
         self.pump_run_interval = 15 * 60
@@ -63,7 +65,6 @@ class hw_daemon(pump_pexpect):
 
     def loop(self):
         while True:
-            self.logger.debug(f'    In loop\n')
             time.sleep(1)   # wait at startup... might avoid conflicts
             self.hw_pump_week.check_entry()
             self.hw_pump_wkend.check_entry()
@@ -86,6 +87,8 @@ class hw_daemon(pump_pexpect):
                 if not self.pump_is_on : self.pump_on = epoch_time
                 self.pump_is_on = True
                 self.set_15 = False
+
+            self.dhw_disable_inst.check_dhw(self.pump_is_on)
 
 if __name__ == "__main__":
 

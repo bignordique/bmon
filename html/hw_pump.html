@@ -34,13 +34,26 @@
                     })
     }
 
+    var seconds = 1;
+
+    function update_stati () {
+        set_get_status("pump", "0");
+        if (seconds == 60) {
+            seconds = 1;
+            set_get_status("vacay_days", "0");
+        }
+    }
+
     function on_load_func (){
         set_get_status("pump", "0");
         set_get_status("vacay_days", "0");
         setInterval(() => {set_get_status("pump", "0");}, 1000);
-        setInterval(() => {set_get_status("vacay_days", "0");}, 60*1000);
     }
     window.onload = on_load_func
+
+    window.setTimeout( function () {
+        window.location.reload();
+    }, 60000)
 
 </script>
 

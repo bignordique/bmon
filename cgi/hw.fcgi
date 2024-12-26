@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 logging.getLogger('hw').setLevel(logging.INFO)
-
+logging.getLogger('hw_daemon').setLevel(logging.DEBUG)
+logging.getLogger('dhw_disable').setLevel(logging.DEBUG)
 logger.info(f'Startup.\n')
 
 if __name__ == "__main__":

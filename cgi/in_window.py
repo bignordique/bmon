@@ -31,8 +31,7 @@ if __name__ == "__main__":
 
     import time
 
-    logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s:%(message)s', 
-                        level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s:%(message)s')
 
     a = in_window("in_window_test", "0-58/2 * * * *", "1-59/2 * * * *")
     logging.getLogger('__main__').setLevel(logging.DEBUG)
