@@ -44,9 +44,12 @@ if __name__ == "__main__":
 
 # Instantiating process_request has the side effect of clearing the dhw_disable_bit.
     if "--clear_dhw_disable" in sys.argv:
-        logging.getLogger('dhw_disable').info(f'\n    Exiting.  dhw_disable_bit: ' +
-                     f'{GPIO.input(dhw_disable_bit)}\n')
-        GPIO.cleanup()
+        logfile = "/var/log/lighttpd/hw_daemon.log"
+        from logging.handlers import RotatingFileHandler
+        rot_handler = RotatingFileHandler(logfile, maxBytes=30000, backupCount=5)
+        logging.getLogger("dhw_disable").addHandler(rot_handler)
+        logging.getLogger("dhw_disable").setLevel(logging.DEBUG)
+        process.daemon.dhw_disable_inst.report_dhw()
         exit()
 
     def test_response(stuff, more_stuff):
