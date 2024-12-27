@@ -7,7 +7,7 @@ import w1thermsensor.errors as w1sensorerrors
 from contextlib import suppress
 from time import time, sleep
 
-temps_file = "/mnt/nfsshare/temps"
+temps_file = "/home/pi/bmon/data/t/temps"
 logfile = "/home/pi/bmon/log/temps_logfile"
 time_format = "%X"
 rd_interval = 60
@@ -65,10 +65,9 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     rot_handler = RotatingFileHandler(logfile, maxBytes=30000, backupCount=5)
     logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d "+\
-                               "%(levelname)s:%(message)s",
+                               "%(levelname)s:\n    %(message)s\n",
                         handlers = [rot_handler],
                         level=logging.DEBUG) 
-    logging.getLogger("asyncio").setLevel(logging.INFO)
 
     temps_logger = logging.getLogger('temps_logger')
     temps_logger.propagate = False
