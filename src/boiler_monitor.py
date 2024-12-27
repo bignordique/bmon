@@ -11,7 +11,7 @@ import sys
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-zc_file = "/mnt/nfsshare/zone_change"
+zc_base = "/home/pi/bmon/data/zc/zone_change"
 zc_logfile = "/home/pi/bmon/log/zc_logfile"
 
 class boiler_monitor ():
@@ -29,21 +29,20 @@ class boiler_monitor ():
 if __name__ == "__main__":
     rot_handler = RotatingFileHandler(zc_logfile, maxBytes=30000, backupCount=5)
     logging.basicConfig(format=
-        "%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:%(message)s",
+        "%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n",
         handlers = [rot_handler],
         level=logging.INFO)
 
     zc_logger = logging.getLogger('zc_logger')
     zc_logger.propagate = False
     zc_rot_handler = \
-        TimedRotatingFileHandler(zc_file, when='midnight', backupCount=7)
+        TimedRotatingFileHandler(zc_base, when='midnight', backupCount=7)
     zc_logger.addHandler(zc_rot_handler)
     zc_logger.setLevel(logging.INFO)
 
-
     main = boiler_monitor(zc_logger)
 
-#    logging.getLogger('gpio_filter').setLevel(logging.DEBUG)
+ #   logging.getLogger("lower_lake").setLevel(logging.DEBUG)
 
     tasks = asyncio.gather(
         asyncio.ensure_future(main.lower_lake.pos_edge()),

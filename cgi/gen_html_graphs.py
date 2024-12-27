@@ -6,7 +6,7 @@ import os
 from time import time, sleep, strftime, localtime
 from datetime import datetime
 
-zone_logfile = "/mnt/nfsshare/zone_change"
+zone_logfile = "/home/pi/bmon/data/zc/zone_change"
 temps_logfile = "/mnt/nfsshare/temps"
 parse_zone = re.compile("^(\d+.\d+)\s+(\w+)\s+([0-1])")
 parse_temps = re.compile("^(\d+.\d+)\s+(-?\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)")

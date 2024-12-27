@@ -21,12 +21,10 @@ class gpio_filter ():
         GPIO.setup(bit, GPIO.IN)
         GPIO.add_event_detect(bit, GPIO.RISING)
         GPIO.add_event_callback(bit, self.set_seen)
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger(name)
         self.last_time = time()
         self.edges_seen = 0
         self.value = 0
-        self.logger.info(f'{self.name} startup')
         self.write_log("startup")
 
     def set_seen(self, channel):
@@ -35,7 +33,6 @@ class gpio_filter ():
         self.edges_seen += 1  
         self.logger.debug (f'{self.name} {diff_time:.4f} {self.edges_seen}')
         self.last_time = now_time
-
 
     def write_log_posedge(self, edges_seen):
         self.zc_logger.info(f'{time()} {self.name} 1 {edges_seen}')
@@ -69,11 +66,23 @@ class gpio_filter ():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:%(message)s",
+    logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n",
             level=logging.INFO)
 
     GPIO.setmode(GPIO.BCM)
-    filt = gpio_filter("lower_lake", 4, "test_log")
+
+    zc_logger = logging.getLogger("zc_logger")
+    zc_logger.propagate = False
+    zc_handler = logging.StreamHandler()
+    zc_formatter = logging.Formatter("%(message)s")
+    zc_handler.setFormatter(zc_formatter)
+    zc_logger.addHandler(zc_handler)
+
+    name="lower_lake"
+    filt = gpio_filter(name, 4, zc_logger)
+
+    logging.getLogger(name).setLevel(logging.DEBUG)
+
     tasks = asyncio.gather(
         asyncio.ensure_future(filt.pos_edge())
     )
