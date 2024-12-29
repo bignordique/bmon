@@ -27,11 +27,13 @@ class hw_daemon(pump_pexpect):
     def set_get_pump(self, minutes):
         if minutes == 15 : self.set_pump_on()
 
-        remaining = self.pump_off - int(time.time())
+        epoch_time = int(time.time())
+
+        remaining = self.pump_off - epoch_time
         if self.pump_is_on:
-            diff = int(time.time()) - self.pump_on
+            diff = epoch_time - self.pump_on
         else:
-            diff = int(time.time()) - self.pump_off
+            diff = epoch_time - self.pump_off
 
         m, s = divmod(diff,60)
         h, m = divmod(m,60)
@@ -54,8 +56,9 @@ class hw_daemon(pump_pexpect):
         return ({"value": self.vacay_days, "vacay_warning": "False"})
 
     def set_get_alexa(self, minutes):
-        if minutes == 15 : self.set_pump_on = True
-        return ({"pump_off": self.pump_off, "pump_on":self.pump_on, "vacay_days": self.vacay_days})
+        if minutes == 15 : self.set_pump_on()
+        return ({"epoch_time": int(time.time()), "pump_off": self.pump_off, "pump_on":self.pump_on, 
+                 "vacay_days": self.vacay_days})
 
     def set_pump_on(self):
         self.set_15 = True

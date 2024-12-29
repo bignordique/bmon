@@ -22,7 +22,7 @@ class process_request():
 #        wsgi_err_handle.write(f'Its howdy dowdy time!\n')
 
         start_response('200 OK', [('Content-Type', 'text/plain')])
-        if request_decoded["button"] == "pump" or request_decoded["button"] == "alexa": 
+        if request_decoded["button"] == "pump": 
             return[json.dumps(self.daemon.set_get_pump(int(request_decoded["value"])))]
         elif request_decoded["button"] == "vacay_days":
             return[json.dumps(self.daemon.set_get_vacay(int(request_decoded["value"])))]
