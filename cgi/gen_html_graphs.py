@@ -56,23 +56,24 @@ class gen_html_graphs ():
         for log_file in (zone_logfile + self.yesterday_suffix, zone_logfile):
             try: 
                 f = open(log_file, "r")
+
+                for line in f:
+                    mobj = parse_zone.search(line)
+                    if mobj is not None:
+                        trace_time = int(float(mobj.group(1))) - self.start_time_secs
+                        if trace_time >= 0:
+                            room = mobj.group(2)
+                            if mobj.group(3) == "1":
+                                self.zone_info[room][0] = trace_time
+                            else:
+                                self.zone_info[room][1] = trace_time
+                                self.stroke_line(room)
+                f.close()
+
             except FileNotFoundError:
                 self.logger.warning(f'{self.name} file "{log_file}" not found')
             except Exception as e:
                 self.logger.error(f'{e}')
-
-            for line in f:
-                mobj = parse_zone.search(line)
-                if mobj is not None:
-                    trace_time = int(float(mobj.group(1))) - self.start_time_secs
-                    if trace_time >= 0:
-                        room = mobj.group(2)
-                        if mobj.group(3) == "1":
-                            self.zone_info[room][0] = trace_time
-                        else:
-                            self.zone_info[room][1] = trace_time
-                            self.stroke_line(room)
-            f.close()
 
         for room in self.zone_info:
             if self.zone_info[room][0] > self.zone_info[room][1]:
