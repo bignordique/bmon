@@ -1,4 +1,4 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 from flup.server.fcgi import WSGIServer
 import logging
 from logging.handlers import RotatingFileHandler

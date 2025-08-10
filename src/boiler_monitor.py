@@ -1,4 +1,4 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 
 import asyncio
 from gpio_filter import gpio_filter
@@ -11,8 +11,8 @@ import sys
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-zc_base = "/home/pi/bmon/data/zc/zone_change"
-zc_logfile = "/home/pi/bmon/log/zc_logfile"
+zc_base = "/srv/bmon/data/zone_change"
+zc_logfile = "/srv/bmon/zc_logfile"
 
 class boiler_monitor ():
 

@@ -1,4 +1,4 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 
 from hw_daemon import hw_daemon
 import logging

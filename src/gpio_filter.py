@@ -1,7 +1,8 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 
 import asyncio
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
+from gpiozero import Button
 from datetime import datetime
 from time import time
 from contextlib import suppress
@@ -18,9 +19,11 @@ class gpio_filter ():
         self.name = name
         self.bit = bit
         self.zc_logger = zc_logger
-        GPIO.setup(bit, GPIO.IN)
-        GPIO.add_event_detect(bit, GPIO.RISING)
-        GPIO.add_event_callback(bit, self.set_seen)
+        self.button = Button(bit)
+        self.button.when_pressed = self.set_seen
+        #GPIO.setup(bit, GPIO.IN)
+        #GPIO.add_event_detect(bit, GPIO.RISING)
+        #GPIO.add_event_callback(bit, self.set_seen)
         self.logger = logging.getLogger(name)
         self.last_time = time()
         self.edges_seen = 0
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n",
             level=logging.INFO)
 
-    GPIO.setmode(GPIO.BCM)
+    #GPIO.setmode(GPIO.BCM)
 
     zc_logger = logging.getLogger("zc_logger")
     zc_logger.propagate = False
@@ -101,4 +104,4 @@ if __name__ == "__main__":
     finally:
         loop.close()
 
-    GPIO.cleanup()
+   # GPIO.cleanup()

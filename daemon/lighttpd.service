@@ -9,6 +9,6 @@ ExecStartPre=/usr/sbin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
 ExecStart=/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
 ExecReload=/bin/kill -USR1 $MAINPID
 Restart=on-failure
-ExecStopPost=/home/pi/bmon/cgi/hw.py --clear_dhw_disable
+ExecStopPost=/home/leith/bmon/cgi/hw.py --clear_dhw_disable
 [Install]
 WantedBy=multi-user.target

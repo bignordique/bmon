@@ -1,4 +1,4 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 
 import logging
 from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
@@ -7,8 +7,8 @@ import w1thermsensor.errors as w1sensorerrors
 from contextlib import suppress
 from time import time, sleep
 
-temps_file = "/home/pi/bmon/data/t/temps"
-logfile = "/home/pi/bmon/log/temps_logfile"
+temps_file = "/srv/temps/data/temps"
+logfile = "/srv/temps/temps_logfile"
 time_format = "%X"
 rd_interval = 60
 
