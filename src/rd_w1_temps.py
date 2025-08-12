@@ -3,7 +3,7 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 from w1thermsensor import W1ThermSensor, Sensor, Unit
-import w1thermsensor.errors as w1sensorerrors
+from w1thermsensor import errors as W1thermsensorerrors
 from contextlib import suppress
 from time import time, sleep
 
@@ -29,8 +29,8 @@ class rd_w1_temps ():
             try:
                 therm_sensor = W1ThermSensor(sensor_type=Sensor.DS18B20, sensor_id=sensor[1])
                 self.sensors[sensor[0]] = therm_sensor
-            except w1thermsensor.errors.NoSensorFoundError:
-                self.logging.error(f'Missing sensor: {sensor}')
+            except W1thermsensorerrors.NoSensorFoundError:
+                self.logger.error(f'Missing sensor: {sensor}')
             except Exception as e:
                 self.logger.error(f'Missing {sensor}, cause: {repr(e)}') 
 
@@ -46,10 +46,10 @@ class rd_w1_temps ():
                 if temps != "": temps += " "
                 try:
                     temp = str(round(self.sensors[sensor].get_temperature(Unit.DEGREES_F), 1)) 
-                except w1sensorerrors.SensorNotReadyError:
+                except W1thermsensorerrors.SensorNotReadyError:
                     self.logger.error(f'{sensor} SensorNotReadyError')
                     temp = "unk"
-                except w1sensorerrors.ResetValueError:
+                except W1thermsensorerrors.ResetValueError:
                     self.logger.error(f'{sensor} ResetValueError')
                     temp = "unk"
                 except Exception as e:
@@ -61,8 +61,8 @@ class rd_w1_temps ():
 
 
 if __name__ == "__main__":
-    import RPi.GPIO as GPIO
-    GPIO.setmode(GPIO.BCM)
+#    import RPi.GPIO as GPIO
+#   GPIO.setmode(GPIO.BCM)
     rot_handler = RotatingFileHandler(logfile, maxBytes=30000, backupCount=5)
     logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d "+\
                                "%(levelname)s:\n    %(message)s\n",

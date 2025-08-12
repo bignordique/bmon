@@ -81,8 +81,8 @@ if __name__ == "__main__":
     zc_handler.setFormatter(zc_formatter)
     zc_logger.addHandler(zc_handler)
 
-    name="lower_lake"
-    filt = gpio_filter(name, 4, zc_logger)
+    name="lower_street"
+    filt = gpio_filter(name, 17, zc_logger)
 
     logging.getLogger(name).setLevel(logging.DEBUG)
 

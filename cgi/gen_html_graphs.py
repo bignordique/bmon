@@ -1,4 +1,4 @@
-#!/home/pi/bmon/venv/bin/python
+#!/home/leith/bmon/.venv/bin/python
 
 import logging
 import re
@@ -6,8 +6,8 @@ import os
 from time import time, sleep, strftime, localtime
 from datetime import datetime
 
-zone_logfile = "/home/pi/bmon/data/zc/zone_change"
-temps_logfile = "/home/pi/bmon/data/t/temps"
+zone_logfile = "/srv/bmon/data/zone_change"
+temps_logfile = "/srv/temps/data/temps"
 parse_zone = re.compile("^(\d+.\d+)\s+(\w+)\s+([0-1])")
 parse_temps = re.compile("^(\d+.\d+)\s+(-?\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)")
 trace_time_secs = 24 * 60 * 60
@@ -99,6 +99,7 @@ class gen_html_graphs ():
         labels = "const my_labels = ["
         line_count = 0
         for log_file in (temps_logfile + self.yesterday_suffix, temps_logfile):
+            f = None
             try: 
                 f = open(log_file, "r")
             except FileNotFoundError:
@@ -106,22 +107,24 @@ class gen_html_graphs ():
             except Exception as e:
                 self.logger.error(f'{e}')
 
-            for line in f:
-                mobj = parse_temps.search(line)
-                trace_time = int(float(mobj.group(1))) - self.start_time_secs
-                if trace_time >= 0:
-                    line_count += 1
-                    if line_count % 1 == 0:
-#                        outside += f'{mobj.group(2)},' 
-                        outside += f'0.0,' if mobj.group(2) == "unk" else f'{mobj.group(2)},' 
-                        wine_caav += f'0.0,' if mobj.group(3) == "unk" else f'{mobj.group(3)},' 
-                        inlet += f'0.0,' if mobj.group(4) == "unk" else f'{mobj.group(4)},' 
-                        hw_supply += f'0.0,' if mobj.group(5) == "unk" else f'{mobj.group(5)},' 
-                        hw_recirc += f'0.0,' if mobj.group(6) == "unk" else f'{mobj.group(6)},' 
-                        floor += f'0.0,' if mobj.group(7) == "unk" else f'{mobj.group(7)},' 
-#                        labels += f'{int(float(mobj.group(1)))},'
-                        labels += f'{int(strftime("%H",localtime(float(mobj.group(1)))))},'
-            f.close()
+            if f is not None:
+                for line in f:
+                    mobj = parse_temps.search(line)
+                    if mobj is not None:
+                        trace_time = int(float(mobj.group(1))) - self.start_time_secs
+                        if trace_time >= 0:
+                            line_count += 1
+                            if line_count % 1 == 0:
+#                            outside += f'{mobj.group(2)},' 
+                                outside += f'0.0,' if mobj.group(2) == "unk" else f'{mobj.group(2)},' 
+                                wine_caav += f'0.0,' if mobj.group(3) == "unk" else f'{mobj.group(3)},' 
+                                inlet += f'0.0,' if mobj.group(4) == "unk" else f'{mobj.group(4)},' 
+                                hw_supply += f'0.0,' if mobj.group(5) == "unk" else f'{mobj.group(5)},' 
+                                hw_recirc += f'0.0,' if mobj.group(6) == "unk" else f'{mobj.group(6)},' 
+                                floor += f'0.0,' if mobj.group(7) == "unk" else f'{mobj.group(7)},' 
+#                                labels += f'{int(float(mobj.group(1)))},'
+                                labels += f'{int(strftime("%H",localtime(float(mobj.group(1)))))},'
+                f.close()
 
         outside += f']\n'
         wine_caav += f']\n'

@@ -8,8 +8,8 @@ import RPi.GPIO as GPIO
 from contextlib import suppress
 import sys
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setwarnings(False)
 
 zc_base = "/srv/bmon/data/zone_change"
 zc_logfile = "/srv/bmon/zc_logfile"
@@ -17,7 +17,7 @@ zc_logfile = "/srv/bmon/zc_logfile"
 class boiler_monitor ():
 
     def __init__ (self, zc_logger):
-        self.lower_lake = gpio_filter("lower_lake", 4, zc_logger)
+#        self.lower_lake = gpio_filter("lower_lake", 4, zc_logger)
         self.lower_street = gpio_filter("lower_street", 17, zc_logger)
         self.shop = gpio_filter("shop", 27, zc_logger)
         self.upper_bedroom = gpio_filter("upper_family", 22, zc_logger)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
  #   logging.getLogger("lower_lake").setLevel(logging.DEBUG)
 
     tasks = asyncio.gather(
-        asyncio.ensure_future(main.lower_lake.pos_edge()),
+#        asyncio.ensure_future(main.lower_lake.pos_edge()),
         asyncio.ensure_future(main.lower_street.pos_edge()),
         asyncio.ensure_future(main.shop.pos_edge()),
         asyncio.ensure_future(main.upper_bedroom.pos_edge()),
@@ -77,4 +77,4 @@ if __name__ == "__main__":
     finally:
         loop.close()
 
-    GPIO.cleanup()
+    #GPIO.cleanup()
