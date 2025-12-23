@@ -7,6 +7,8 @@ from datetime import datetime
 from time import time
 from contextlib import suppress
 import logging
+from gpiozero import Device
+from gpiozero.pins.lgpio import LGPIOFactory
 
 class gpio_filter ():
 
@@ -18,13 +20,15 @@ class gpio_filter ():
     def __init__ (self, name, bit, zc_logger):
         self.name = name
         self.bit = bit
+        self.logger = logging.getLogger(name)
         self.zc_logger = zc_logger
+        Device.pin_factory=LGPIOFactory()
         self.button = Button(bit)
         self.button.when_pressed = self.set_seen
-        #GPIO.setup(bit, GPIO.IN)
-        #GPIO.add_event_detect(bit, GPIO.RISING)
-        #GPIO.add_event_callback(bit, self.set_seen)
-        self.logger = logging.getLogger(name)
+#        GPIO.setup(bit, GPIO.IN)
+#        GPIO.add_event_detect(bit, GPIO.RISING)
+#        GPIO.add_event_callback(bit, self.set_seen)
+
         self.last_time = time()
         self.edges_seen = 0
         self.value = 0
@@ -81,8 +85,8 @@ if __name__ == "__main__":
     zc_handler.setFormatter(zc_formatter)
     zc_logger.addHandler(zc_handler)
 
-    name="lower_street"
-    filt = gpio_filter(name, 17, zc_logger)
+    name="lower_lake"
+    filt = gpio_filter(name, 4, zc_logger)
 
     logging.getLogger(name).setLevel(logging.DEBUG)
 
@@ -93,7 +97,7 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
     try:
-        loop.set_debug(False)
+        loop.set_debug(True)
         loop.run_until_complete(tasks)
     except KeyboardInterrupt as e:
         print (f'keyboardinterrupt: {e}')

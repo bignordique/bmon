@@ -44,14 +44,13 @@ class rd_w1_temps ():
             temps = ""
             for sensor in self.sensors:
                 if temps != "": temps += " "
+                temp = "unk"
                 try:
                     temp = str(round(self.sensors[sensor].get_temperature(Unit.DEGREES_F), 1)) 
                 except W1thermsensorerrors.SensorNotReadyError:
                     self.logger.error(f'{sensor} SensorNotReadyError')
-                    temp = "unk"
                 except W1thermsensorerrors.ResetValueError:
                     self.logger.error(f'{sensor} ResetValueError')
-                    temp = "unk"
                 except Exception as e:
                     self.logger.error(f'{sensor} unknown exception {repr(e)}')
                 temps += temp
@@ -61,8 +60,6 @@ class rd_w1_temps ():
 
 
 if __name__ == "__main__":
-#    import RPi.GPIO as GPIO
-#   GPIO.setmode(GPIO.BCM)
     rot_handler = RotatingFileHandler(logfile, maxBytes=30000, backupCount=5)
     logging.basicConfig(format="%(asctime)s %(name)s %(module)s:%(lineno)d "+\
                                "%(levelname)s:\n    %(message)s\n",
