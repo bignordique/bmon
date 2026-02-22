@@ -7,7 +7,7 @@ import sys
 import json
 
 EXE_LOGFILE = "/var/log/lighttpd/cellar_temp_exe.log"
-CELLAR_TEMP_FILE = "/tmp/cellar_temp"
+RIGID_AC_TEMP_FILE = "/tmp/rigid_ac_temp"
 
 if __name__ == "__main__":
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     logging.debug (f'bytes_received: {bytes_received}  bytes: {post_bytes}')
 
     try:
-        with open(CELLAR_TEMP_FILE, "w") as f:
+        with open(RIGID_AC_TEMP_FILE, "w") as f:
             f.write(post_bytes)
     except Exception as e:
         logging.error(f'File write error: {e}')
