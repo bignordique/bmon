@@ -92,6 +92,7 @@ class gen_html_graphs ():
     def gen_temps(self):
         outside = "const outside = ["
         wine_caav = "const wine_caav = ["
+        rigid_ac = "const rigid_ac = ["
         inlet = "const inlet = ["
         hw_supply = "const hw_supply = ["
         hw_recirc = "const hw_recirc = ["
@@ -128,12 +129,13 @@ class gen_html_graphs ():
 
         outside += f']\n'
         wine_caav += f']\n'
+        rigid_ac += ']\n'
         inlet += f']\n'
         hw_supply += f']\n'
         hw_recirc += f']\n'
         floor += f']\n'
         labels += f']'
-        return(outside + wine_caav + inlet + hw_supply + hw_recirc + floor + labels)
+        return(outside + wine_caav + rigid_ac + inlet + hw_supply + hw_recirc + floor + labels)
 
 if __name__ == "__main__":
 
