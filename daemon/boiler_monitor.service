@@ -8,7 +8,10 @@ Type=simple
 Restart=always
 Restartsec=1
 User=leith
-ExecStart=/home/leith/bmon/src/boiler_monitor.py
+# gpiozero creates a named pipe in the working directory.   Make
+# sure the User has write permissions in the WorkingDirectory.
+WorkingDirectory=/srv/bmon
+ExecStart=/home/leith/bmon/.venv/bin/python /home/leith/bmon/src/boiler_monitor.py
 #ExecStopPost=/home/leith/bmon/src/boiler_monitor.py --clear_dhw_disable
 PIDfile=/run/boiler_monitor
 [Install]

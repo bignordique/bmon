@@ -2,22 +2,34 @@
 
 import logging
 from logging.handlers import RotatingFileHandler
-import cgitb
 import os
+import sys
+import json
 
 EXE_LOGFILE = "/var/log/lighttpd/cellar_temp_exe.log"
 CELLAR_TEMP_FILE = "/tmp/cellar_temp"
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
-            format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n")
-    logger = logging.getLogger(__name__)
-# Does not delete stdout handler.   OK since stdout inside lighttpd goes to /dev/null (I think)
-    logger.addHandler(RotatingFileHandler(EXE_LOGFILE, maxBytes=10000, backupCount=2))
-    logger.info(f'hello world\n')
 
+# Just use root handler.   Configure to only output to EXE_LOGFILE
+    logging.basicConfig(level=logging.DEBUG, 
+                        handlers=[RotatingFileHandler(EXE_LOGFILE, 'a', maxBytes=10000, backupCount=2)],
+                        format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n")
+#    print (f'logging.handlers: {logging.handlers}', file=sys.stderr)
 
+    environ = ""
     for param in sorted(os.environ.keys()):
-        print (f'{param}:{os.environ[param]}')
+        environ += f'{param}:{os.environ[param]}'
+    bytes_received = int(os.environ["CONTENT_LENGTH"])
+    post_bytes = sys.stdin.read(bytes_received)
+    logging.debug (f'bytes_received: {bytes_received}  bytes: {post_bytes}')
 
+    try:
+        with open(CELLAR_TEMP_FILE, "w") as f:
+            f.write(post_bytes)
+    except Exception as e:
+        logging.error(f'File write error: {e}')
+
+
+    print("abide", end="")
 
