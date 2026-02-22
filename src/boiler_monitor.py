@@ -6,9 +6,6 @@ import logging
 from logging.handlers import TimedRotatingFileHandler,RotatingFileHandler
 #import RPi.GPIO as GPIO
 from contextlib import suppress
-import os
-
-print(os.environ)
 
 #GPIO.setmode(GPIO.BCM)
 #GPIO.setwarnings(False)

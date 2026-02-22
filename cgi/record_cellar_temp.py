@@ -12,7 +12,7 @@ CELLAR_TEMP_FILE = "/tmp/cellar_temp"
 if __name__ == "__main__":
 
 # Just use root handler.   Configure to only output to EXE_LOGFILE
-    logging.basicConfig(level=logging.DEBUG, 
+    logging.basicConfig(level=logging.INFO, 
                         handlers=[RotatingFileHandler(EXE_LOGFILE, 'a', maxBytes=10000, backupCount=2)],
                         format="%(asctime)s %(name)s %(module)s:%(lineno)d %(levelname)s:\n    %(message)s\n")
 #    print (f'logging.handlers: {logging.handlers}', file=sys.stderr)
