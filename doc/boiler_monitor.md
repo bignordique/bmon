@@ -12,7 +12,8 @@ timer.   If timer times out, set output to zero.
 Pi pin assignments from /boot/config.txt for the one wire and optoisolated 24VAC inputs for boiler_monitor:
 <ul>
 <li>lower_lake 4
-<li>boiler 5
+<li>## boiler 5  3/12/2026   Boiler quit working.   Appears to be something with the PI, or the nifty LED board.   Switched to IO13
+<li>boiler 13
 <li>hw_tank 6
 <li>w1-gpio gpiopin=16
 <li>lower_street 17

@@ -23,7 +23,7 @@ class boiler_monitor ():
         self.upper_hallway = gpio_filter("upper_hallway", 19, zc_logger)
         self.upper_family = gpio_filter("upper_bedroom", 26, zc_logger)
         self.hw_tank = gpio_filter("hw_tank", 6, zc_logger)
-        self.boiler = gpio_filter("boiler", 5, zc_logger)
+        self.boiler = gpio_filter("boiler", 13, zc_logger)
 
 if __name__ == "__main__":
     rot_handler = RotatingFileHandler(zc_logfile, maxBytes=30000, backupCount=5)
