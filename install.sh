@@ -19,6 +19,7 @@ sudo mkdir /var/www/cgi-bin
 # Make sure the shebang ponits to the correct Python executable.
 sudo ln -s /home/leith/bmon/cgi/hw.fcgi /var/www/cgi-bin
 sudo ln -s /home/leith/bmon/cgi/record_ac_temp.py /var/www/cgi-bin/record_ac_temp.py
+sudo ln -s /home/leith/bmon/cgi/record_ac_pow.py /var/www/cgi-bin/record_ac_pow.py
 sudo ln -s /home/leith/bmon/cgi/gen_html_graphs.py /var/www/cgi-bin/gen_html_graphs.py   #not working yet though???
 
 sudo ln -s /home/leith/bmon/html/index.html /var/www/html

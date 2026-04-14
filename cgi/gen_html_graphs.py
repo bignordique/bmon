@@ -9,7 +9,7 @@ from datetime import datetime
 zone_logfile = "/srv/bmon/data/zone_change"
 temps_logfile = "/srv/temps/data/temps"
 parse_zone = re.compile("^(\d+.\d+)\s+(\w+)\s+([0-1])")
-parse_temps = re.compile("^(\d+.\d+)\s+(-?\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)")
+parse_temps = re.compile("^(\d+.\d+)\s+(-?\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)\s+(\d+.\d+|unk)")
 trace_time_secs = 24 * 60 * 60
 canvas_x = 350
 x_scale = canvas_x/trace_time_secs
@@ -93,6 +93,7 @@ class gen_html_graphs ():
         outside = "const outside = ["
         wine_caav = "const wine_caav = ["
         rigid_ac = "const rigid_ac = ["
+        rigid_ac_pow = "const rigid_ac_pow = ["
         inlet = "const inlet = ["
         hw_supply = "const hw_supply = ["
         hw_recirc = "const hw_recirc = ["
@@ -120,10 +121,11 @@ class gen_html_graphs ():
                                 outside += f'0.0,' if mobj.group(2) == "unk" else f'{mobj.group(2)},' 
                                 wine_caav += f'0.0,' if mobj.group(3) == "unk" else f'{mobj.group(3)},' 
                                 rigid_ac += f'0.0,' if mobj.group(4) == "unk" else f'{mobj.group(4)},' 
-                                inlet += f'0.0,' if mobj.group(5) == "unk" else f'{mobj.group(5)},' 
-                                hw_supply += f'0.0,' if mobj.group(6) == "unk" else f'{mobj.group(6)},' 
-                                hw_recirc += f'0.0,' if mobj.group(7) == "unk" else f'{mobj.group(7)},' 
-                                floor += f'0.0,' if mobj.group(8) == "unk" else f'{mobj.group(8)},' 
+                                rigid_ac_pow += f'0.0,' if mobj.group(5) == "unk" else f'{mobj.group(5)},'
+                                inlet += f'0.0,' if mobj.group(6) == "unk" else f'{mobj.group(6)},' 
+                                hw_supply += f'0.0,' if mobj.group(7) == "unk" else f'{mobj.group(7)},' 
+                                hw_recirc += f'0.0,' if mobj.group(8) == "unk" else f'{mobj.group(8)},' 
+                                floor += f'0.0,' if mobj.group(9) == "unk" else f'{mobj.group(9)},' 
 #                                labels += f'{int(float(mobj.group(1)))},'
                                 labels += f'{int(strftime("%H",localtime(float(mobj.group(1)))))},'
                 f.close()
@@ -131,12 +133,13 @@ class gen_html_graphs ():
         outside += f']\n'
         wine_caav += f']\n'
         rigid_ac += ']\n'
+        rigid_ac_pow += ']\n'
         inlet += f']\n'
         hw_supply += f']\n'
         hw_recirc += f']\n'
         floor += f']\n'
         labels += f']'
-        return(outside + wine_caav + rigid_ac + inlet + hw_supply + hw_recirc + floor + labels)
+        return(outside + wine_caav + rigid_ac + rigid_ac_pow + inlet + hw_supply + hw_recirc + floor + labels)
 
 if __name__ == "__main__":
 
