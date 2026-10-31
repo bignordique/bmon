@@ -27,5 +27,6 @@ Pi pin assignments from /boot/config.txt for the one wire and optoisolated 24VAC
 <li>w1-gpio gpiopin=25
 <li>upper_bedroom 26
 <li>shop 27
+<li>boiler ventilation fan=12 10/27/2026
 </ul>
 

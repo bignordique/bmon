@@ -2,3 +2,5 @@ log
 venv
 __pycache__
 data
+test/boiler_fan/temps
+test/boiler_fan/logfile*
