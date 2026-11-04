@@ -10,6 +10,7 @@ import RPi.GPIO as GPIO
 import argparse
 import asyncio
 from contextlib import suppress
+import schedule
 
 TRUST_TEMP_WINDOW = 5*60 #seconds
 
@@ -21,12 +22,21 @@ class boiler_fan ():
         self.temp_target = float(temp_target)
         self.loop_delay = int(loop_delay)
         self.hysteresis = hysteresis
-
-        self.logger.info (f'{name} initialized\n')
         self.temp_line_re = re.compile(r'([+-]?\d+\.\d+|unk)')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(12,GPIO.OUT)
+        self.fan_run = 0
+        self.fan_time = 0
+        schedule.every().day.at("00:00").do(self.report_running_time)
+        schedule.run_pending()
+        self.logger.info (f'{name} initialized\n')
+
+    def report_running_time(self):
+        self.logger.info (f'Fan run last 24 hours: {self.fan_run/self.fan_time:%}.\n')
+        self.fan_run = 0
+        self.fan_time = 0
+        schedule.run_pending()
 
     async def run(self):
         temps_path = Path(self.temps_file)
@@ -72,11 +82,13 @@ class boiler_fan ():
                 GPIO.output(12, fan_value)
 
             if GPIO.input(12) != last_output:
-                self.logger.info(f'fan control: {GPIO.input(12)}')
+                self.logger.debug(f'Fan control: {GPIO.input(12)}  target:{self.temp_target} wine_cellar:{wine_cellar} outside:{outside_air}')
+
+            self.fan_time += self.loop_delay
+            if GPIO.input(12):
+                self.fan_run += self.loop_delay
 
             last_output = GPIO.input(12)
-
-            self.logger.debug(f'Fan control: {GPIO.input(12)}  target:{self.temp_target} wine_cellar:{wine_cellar} outside:{outside_air} ')
                 
             await asyncio.sleep(self.loop_delay)
 

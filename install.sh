@@ -43,7 +43,9 @@ sudo systemctl daemon-reload
 sudo ln -s /home/leith/bmon/daemon/lighttpd.service /etc/systemd/system/lighttpd.service 
 sudo ln -s /home/leith/bmon/daemon/boiler_monitor.service /etc/systemd/system/boiler_monitor.service
 sudo ln -s /home/leith/bmon/daemon/rd_w1_temps.service /etc/systemd/system/rd_w1_temps.service
+sudo ln -s /home/leith/bmon/daemon/boiler_fan.service /etc/systemd/system/boiler_fan.service
 sudo systemctl enable boiler_monitor
 sudo systemctl enable rd_w1_temps
+sudo systemctl enable boiler_fan
 
 

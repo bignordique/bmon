@@ -6,13 +6,12 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 Restart=always
-Restartsec=1
+RestartSec=1
 User=leith
 # gpiozero creates a named pipe in the working directory.   Make
 # sure the User has write permissions in the WorkingDirectory.
 WorkingDirectory=/srv/boiler_fan
 ExecStart=/home/leith/bmon/.venv/bin/python /home/leith/bmon/src/boiler_fan.py
-#ExecStopPost=/home/leith/bmon/src/boiler_monitor.py --clear_dhw_disable
-PIDfile=/run/boiler_fan
+PIDFile=/run/boiler_fan
 [Install]
 WantedBy=multi-user.target

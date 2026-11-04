@@ -9,5 +9,6 @@ ptyprocess==0.7.0
 python-dateutil==2.9.0.post0
 pytz==2024.2
 RPi.GPIO==0.7.1
+schedule==1.2.2
 six==1.16.0
 w1thermsensor==2.0.0
